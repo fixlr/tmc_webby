@@ -5,6 +5,10 @@ filter:
   - erb
   - textile
 ---
-h2. <%= h(@page.title) %>
+h2. Archives
 
-<!-- Create archive page for every image file found in images/strips -->
+<ol>
+<%=
+	@pages.find(:all, :in_directory => 'images/strips').collect {|p| "<li><a href=\"#{p.url}\">#{p.filename}</a></li>"}
+%>
+</ol>

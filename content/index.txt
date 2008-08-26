@@ -1,7 +1,19 @@
 ---
-title:  The Moseying
+title:      The Moseying
+created_at: 2008-08-25 23:57:14.101094 -04:00
+dirty: true
 filter:
   - erb
   - textile
 ---
-<p id="comic"><img src="images/strips/20080608.jpg" width="750" height="250" alt="Zzzzz..." /></p>
+<%
+	strips = @pages.find(:all, :in_directory => 'images/strips')
+	paginate(strips, 1) do |page|
+%>
+	<p id="comic"><img src="<%= page.url %>" width="750" height="250" /></p>
+<% end %>
+
+<ul id="nav">
+	<%= '<li>' + link_to("Previous", @pager.prev) + '</li>' if @pager.prev? %>
+	<%= '<li>' + link_to("Next", @pager.next) + '</li>' if @pager.next? %>
+</ul>
