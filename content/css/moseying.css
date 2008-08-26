@@ -1,0 +1,27 @@
+---
+extension: css
+filter:    erb
+layout:    nil   # no layout
+---
+p#comic { 
+	width: 750px; 
+	margin-left: auto; 
+	margin-right: auto; 
+	margin-top: 2em; 
+}
+
+ul#nav { 
+	list-style: none; 
+	text-align: center; 
+	width: 750px; 
+}
+
+ul#nav li { 
+	display: inline; 
+}
+
+p#footer { 
+	font-size: 11px;	
+	margin-top: 30px; 
+	text-align: center; 
+}

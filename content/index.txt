@@ -1,0 +1,7 @@
+---
+title:  The Moseying
+filter:
+  - erb
+  - textile
+---
+<p id="comic"><img src="images/strips/20080608.jpg" width="750" height="250" alt="Zzzzz..." /></p>
