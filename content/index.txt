@@ -7,10 +7,19 @@ filter:
   - textile
 ---
 <%
-	strips = @pages.find(:all, :in_directory => 'images/strips')
+	strips = @pages.find(:all, :in_directory => 'images/strips').reject {|s| s.url =~ /^\./}
+	strips.each do |s|
+		class << s
+			alias_method :image_url, :url
+			def url
+				"/archives/#{filename}.html"
+			end
+		end
+	end
+
 	paginate(strips, 1) do |page|
 %>
-	<p id="comic"><img src="<%= page.url %>" width="750" height="250" /></p>
+	<p><%= page.url %></p>
 <% end %>
 
 <ul id="nav">
