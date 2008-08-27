@@ -7,8 +7,4 @@ filter:
 ---
 h2. Archives
 
-<ol>
-<%=
-	@pages.find(:all, :in_directory => 'images/strips').collect {|p| "<li><a href=\"#{p.url}\">#{p.filename}</a></li>"}
-%>
-</ol>
+<%= archives %>
