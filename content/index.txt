@@ -1,28 +1,7 @@
 ---
 title:      The Moseying
 created_at: 2008-08-25 23:57:14.101094 -04:00
-dirty: true
 filter:
   - erb
   - textile
 ---
-<%
-	strips = @pages.find(:all, :in_directory => 'images/strips').reject {|s| s.url =~ /^\./}
-	strips.each do |s|
-		class << s
-			alias_method :image_url, :url
-			def url
-				"/archives/#{filename}.html"
-			end
-		end
-	end
-
-	paginate(strips, 1) do |page|
-%>
-	<p><%= page.url %></p>
-<% end %>
-
-<ul id="nav">
-	<%= '<li>' + link_to("Previous", @pager.prev) + '</li>' if @pager.prev? %>
-	<%= '<li>' + link_to("Next", @pager.next) + '</li>' if @pager.next? %>
-</ul>
