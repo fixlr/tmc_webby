@@ -11,13 +11,17 @@ module ArchivesHelper
     strips.sort! {|a,b| a.filename <=> b.filename}
     list   = ArchivesList.new
 
-    for a_strip in strips
+    strips.each_index do |i|
+      a_strip = strips[i]
+
 
       # Create individual pages for each archived strip
       page = create_strip_page_for(a_strip)
       page << image_for(a_strip)
-      page << previous_link_for(page, strips)
-      page << next_link_for(page, strips)
+      page << '<ul id="nav">'
+      page << previous_link_for(strips[i-1]) unless i < 1
+      page << next_link_for(strips[i+1]) unless i >= strips.size-1
+      page << '</ul>'
       
       Logging::Logger[self].info "creating output#{page.url}"
       page.save_to_archives!
@@ -30,16 +34,7 @@ module ArchivesHelper
 
   private
   def create_strip_page_for(strip)
-    page = StripPage.new(strip)
-
-    # TODO: Decide whether I can update only the pages that need to be 
-    #   updated.  e.g.: New strips + previous + next (to add strip nav)
-    #
-    # if File.exist? File.join(ARCHIVES_ROOT, page.filename)
-    #   return nil
-    # else
-      return page
-    # end
+    StripPage.new(strip)
   end
   
   def li_and_a_for(page)
@@ -51,12 +46,12 @@ module ArchivesHelper
 # TODO:  Make url for previous_link_for and next_link_for actually point
 #   to the previous and next pages.  Right now it points to the current page.
   
-  def previous_link_for(page, strips)
-    (page.date == strips.first.filename) ? '' : %(<li><a href="#{page.url}">Previous</a></li>)
+  def previous_link_for(strip)
+    %(<li><a href="#{create_strip_page_for(strip).url}">Previous</a></li>)
   end
 
-  def next_link_for(page, strips)
-    (page.date == strips.last.filename) ? '' : %(<li><a href="#{page.url}">Next</a></li>)
+  def next_link_for(strip)
+    %(<li><a href="#{create_strip_page_for(strip).url}">Next</a></li>)
   end
   
   def image_for(strip)
@@ -92,7 +87,9 @@ module ArchivesHelper
     end
 
     def save_to_archives!
-      template = ERB.new(File.read(File.dirname(__FILE__) + '/../layouts/default.rhtml'))
+      # TODO: Figure out how to use Webby's renderer so that I can apply other
+      # page filters.
+      template = ERB.new(File.read(File.dirname(__FILE__) + '/../layouts/strip.rhtml'))
       File.open(self.path, 'w') do |out|
         out << template.result(binding)
       end

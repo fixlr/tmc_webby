@@ -5,3 +5,10 @@ filter:
   - erb
   - textile
 ---
+<% strips = @pages.find(:all, :in_directory => 'images/strips') %>
+
+<p id="comic"><img src="<%= strips.first.url %>" /></p>
+
+<ul id="nav">
+	<%= previous_link_for(strips[1]) %>
+</ul>
