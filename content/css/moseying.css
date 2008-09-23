@@ -17,7 +17,8 @@ ul#nav {
 }
 
 ul#nav li { 
-	display: inline; 
+	display: inline;
+	text-transform: lowercase;
 }
 
 p#footer { 
