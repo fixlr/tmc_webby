@@ -19,8 +19,8 @@ module ArchivesHelper
       page = create_strip_page_for(a_strip)
       page << image_for(a_strip)
       page << '<ul id="nav">'
-      page << previous_link_for(strips[i-1]) unless i < 1
-      page << next_link_for(strips[i+1]) unless i >= strips.size-1
+      page << (i < 1 ? '<li>Previous</li>' : previous_link_for(strips[i-1]))
+      page << (i >= strips.size-1 ? '<li>Next</li>' : next_link_for(strips[i+1]))
       page << '</ul>'
       
       Logging::Logger[self].info "creating output/archives/#{page.filename}"
@@ -61,7 +61,8 @@ module ArchivesHelper
     attr_reader :filename, :url, :title
 
     def initialize(strip)
-      @title    = "#{strip.filename}"
+      @created_on = Date.strptime("#{strip.filename}", '%Y%m%d')
+      @title = "#{@created_on.year} #{Date::MONTHNAMES[@created_on.month][0..2]} #{"%0.2d" % @created_on.day}"
       @filename = "#{strip.filename}.html"
       @url      = "/archives/#{strip.filename}"
       @content  = ''
