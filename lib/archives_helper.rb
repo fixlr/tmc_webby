@@ -19,7 +19,7 @@ module ArchivesHelper
       page = create_strip_page_for(a_strip)
       page << image_for(a_strip)
       page << '<ul id="nav">'
-      page << (i < 1 ? '<li>%nbsp;</li>' : previous_link_for(strips[i-1]))
+      page << (i < 1 ? '<li>&nbsp;</li>' : previous_link_for(strips[i-1]))
       page << (i >= strips.size-1 ? '<li>&nbsp;</li>' : next_link_for(strips[i+1]))
       page << '</ul>'
       
