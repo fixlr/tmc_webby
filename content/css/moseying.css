@@ -11,18 +11,23 @@ p#comic {
 }
 
 ul#nav { 
+        margin-left: auto;
+        margin-right: auto;
 	list-style: none; 
 	text-align: center; 
 	width: 750px; 
+        height: 1.5em;
 }
 
 ul#nav li { 
-	display: inline;
+	display: block;
+        float: left;
+        width: 150px;
 	text-transform: lowercase;
 }
 
 p#footer { 
+        clear: left;
 	font-size: 11px;	
-	margin-top: 30px; 
 	text-align: center; 
 }
