@@ -5,6 +5,7 @@ require 'ostruct'
 module ArchivesHelper
   
   ARCHIVES_ROOT = File.join(File.dirname(__FILE__), '..', 'output', 'archives')
+  STRIPS_ROOT  = File.join(File.dirname(__FILE__), '..', 'content', 'images', 'strips')
 
   def archives_list
   	strips = @pages.find(:all, :in_directory => 'images/strips').reject {|s| s.url =~ /^\./}
@@ -17,7 +18,7 @@ module ArchivesHelper
 
       # Create individual pages for each archived strip
       page = create_strip_page_for(a_strip)
-      page << image_for(a_strip) if a_strip.ext == 'jpg'
+      page << image_for(a_strip)
       page << '<ul id="nav">'
       page << (i < 1 ? '<li>&nbsp;</li>' : previous_link_for(strips[i-1]))
       page << (i >= strips.size-1 ? '<li>&nbsp;</li>' : next_link_for(strips[i+1]))
@@ -51,9 +52,17 @@ module ArchivesHelper
   end
   
   def image_for(strip)
-    j = JPEG.new(File.join(File.dirname(__FILE__), '..', 'content', 'images', 'strips', "#{strip.filename}.#{strip.ext}"))
+    case strip.ext.downcase
+    when /jpg|jpeg/
+      image = JPEG.new(File.join(STRIPS_ROOT, "#{strip.filename}.#{strip.ext}"))
+    when /gif/
+      image = GIF.new(File.join(STRIPS_ROOT, "#{strip.filename}.#{strip.ext}"))
+    else
+      image = OpenStruct.new({:height => 100, :width => 100})
+    end
+    
     %(<p id="comic">
-        <img src="#{strip.url}" height="#{j.height}" width="#{j.width}" />
+        <img src="#{strip.url}" height="#{image.height}" width="#{image.width}" />
       </p>)
   end
   
