@@ -51,8 +51,9 @@ module ArchivesHelper
   end
   
   def image_for(strip)
+    j = JPEG.new(File.join(File.dirname(__FILE__), '..', 'output', 'images', 'strips', "#{strip.filename}.jpg"))
     %(<p id="comic">
-        <img src="#{strip.url}" height="250" width="750" />
+        <img src="#{strip.url}" height="#{j.height}" width="#{j.width}" />
       </p>)
   end
   
@@ -66,7 +67,6 @@ module ArchivesHelper
       @filename = "#{strip.filename}.html"
       @url      = "/archives/#{strip.filename}"
       @content  = ''
-      @page     = OpenStruct.new({:title => strip.filename})
     end
 
     def date
@@ -82,6 +82,8 @@ module ArchivesHelper
     end
 
     def save_to_archives!
+      @page     = OpenStruct.new({:title => @title})
+
       # TODO: Figure out how to use Webby's renderer so that I can apply other
       # page filters.
       template = ERB.new(File.read(File.dirname(__FILE__) + '/../layouts/strip.rhtml'))
