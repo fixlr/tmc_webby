@@ -23,7 +23,7 @@ module ArchivesHelper
       page << next_link_for(strips[i+1]) unless i >= strips.size-1
       page << '</ul>'
       
-      Logging::Logger[self].info "creating output#{page.url}"
+      Logging::Logger[self].info "creating output/archives/#{page.filename}"
       page.save_to_archives!
 
       # Add a list item to the archive list
@@ -35,10 +35,6 @@ module ArchivesHelper
   private
   def create_strip_page_for(strip)
     StripPage.new(strip)
-  end
-  
-  def li_and_a_for(page)
-    %(<li><a href="#{page.url}">#{page.filename}</a></li>\n)
   end
 
 # TODO:  Find a better way to determine whether this is the first or last
@@ -62,10 +58,12 @@ module ArchivesHelper
   
   
   class StripPage
-    attr_reader :filename
+    attr_reader :filename, :url, :title
 
     def initialize(strip)
+      @title    = "#{strip.filename}"
       @filename = "#{strip.filename}.html"
+      @url      = "/archives/#{strip.filename}"
       @content  = ''
       @page     = OpenStruct.new({:title => strip.filename})
     end
@@ -78,10 +76,6 @@ module ArchivesHelper
       File.join(ARCHIVES_ROOT, @filename)
     end
     
-    def url
-      "/archives/#{@filename}"
-    end
-
     def <<(s)
       @content << s
     end
@@ -102,7 +96,7 @@ module ArchivesHelper
     end
     
     def <<(page)
-      @content << %(<li><a href="#{page.url}">#{page.filename}</a></li>\n)
+      @content << %(<li><a href="#{page.url}">#{page.title}</a></li>\n)
     end
     
     def to_s
