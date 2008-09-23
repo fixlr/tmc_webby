@@ -17,13 +17,13 @@ module ArchivesHelper
 
       # Create individual pages for each archived strip
       page = create_strip_page_for(a_strip)
-      page << image_for(a_strip)
+      page << image_for(a_strip) if a_strip.ext == 'jpg'
       page << '<ul id="nav">'
       page << (i < 1 ? '<li>&nbsp;</li>' : previous_link_for(strips[i-1]))
       page << (i >= strips.size-1 ? '<li>&nbsp;</li>' : next_link_for(strips[i+1]))
       page << '</ul>'
       
-      Logging::Logger[self].info "creating output/archives/#{page.filename}"
+      Logging::Logger[self].info "creating #{ARCHIVES_ROOT}/#{page.filename}"
       page.save_to_archives!
 
       # Add a list item to the archive list
@@ -51,7 +51,7 @@ module ArchivesHelper
   end
   
   def image_for(strip)
-    j = JPEG.new(File.join(File.dirname(__FILE__), '..', 'output', 'images', 'strips', "#{strip.filename}.jpg"))
+    j = JPEG.new(File.join(File.dirname(__FILE__), '..', 'content', 'images', 'strips', "#{strip.filename}.#{strip.ext}"))
     %(<p id="comic">
         <img src="#{strip.url}" height="#{j.height}" width="#{j.width}" />
       </p>)
