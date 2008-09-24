@@ -74,7 +74,7 @@ module ArchivesHelper
       @created_on = Date.strptime("#{strip.filename}", '%Y%m%d')
       @title = "#{@created_on.year} #{Date::MONTHNAMES[@created_on.month][0..2]} #{"%0.2d" % @created_on.day}"
       @filename = "#{strip.filename}.html"
-      @url      = "/archives/#{strip.filename}"
+      @url      = "/archives/#{strip.filename}.html"
       @content  = ''
     end
 
