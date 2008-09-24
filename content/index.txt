@@ -6,9 +6,9 @@ filter:
   - textile
 dirty: true
 ---
-<% strips = @pages.find(:all, :in_directory => 'images/strips', :reverse => true) %>
+<% strips = @pages.find(:all, :in_directory => 'images/strips', :sort_by => 'filename') %>
 
-<p id="comic"><img src="<%= strips.last.url %>" /></p>
+<p id="comic"><%= image_for(strips.last) %></p>
 
 <ul id="nav">
 	<%= previous_link_for(strips[strips.size-2]) if strips.size >=2 %>
